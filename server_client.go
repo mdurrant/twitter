@@ -51,15 +51,20 @@ func (s *ServerClient) GetAuthURL(tokenUrl string) string {
 }
 
 func (s *ServerClient) CompleteAuth(tokenKey, verificationCode string) (*oauth.AccessToken, error) {
-	accessToken, err := s.OAuthConsumer.AuthorizeToken(s.OAuthTokens[tokenKey], verificationCode)
-	if err != nil {
-		return nil, err
-	}
+	if _, ok := s.OAuthTokens[tokenKey]; ok {
+		accessToken, err := s.OAuthConsumer.AuthorizeToken(s.OAuthTokens[tokenKey], verificationCode)
+		
+		if err != nil {
+			return nil, err
+		}
 
-	s.HttpConn, err = s.OAuthConsumer.MakeHttpClient(accessToken)
-	if err != nil {
-		return nil, err
+		s.HttpConn, err = s.OAuthConsumer.MakeHttpClient(accessToken)
+		if err != nil {
+			return nil, err
+		}
+
+		return accessToken, nil
 	}
 	
-	return accessToken, nil
+	return nil, nil
 }
