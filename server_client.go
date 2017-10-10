@@ -53,12 +53,12 @@ func (s *ServerClient) GetAuthURL(tokenUrl string) string {
 func (s *ServerClient) CompleteAuth(tokenKey, verificationCode string) (*oauth.AccessToken, error) {
 	accessToken, err := s.OAuthConsumer.AuthorizeToken(s.OAuthTokens[tokenKey], verificationCode)
 	if err != nil {
-		return nil, error
+		return nil, err
 	}
 
 	s.HttpConn, err = s.OAuthConsumer.MakeHttpClient(accessToken)
 	if err != nil {
-		return nil, error
+		return nil, err
 	}
 	
 	return accessToken, nil
