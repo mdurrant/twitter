@@ -50,7 +50,7 @@ func (s *ServerClient) GetAuthURL(tokenUrl string) string {
 	return requestUrl
 }
 
-func (s *ServerClient) CompleteAuth(tokenKey, verificationCode string) error {
+func (s *ServerClient) CompleteAuth(tokenKey, verificationCode string) accessToken, error {
 	accessToken, err := s.OAuthConsumer.AuthorizeToken(s.OAuthTokens[tokenKey], verificationCode)
 	if err != nil {
 		log.Fatal(err)
@@ -60,5 +60,6 @@ func (s *ServerClient) CompleteAuth(tokenKey, verificationCode string) error {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return nil
+	
+	return accessToken, nil
 }
